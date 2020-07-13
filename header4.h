@@ -6,11 +6,11 @@ class Matrix
 	Matrix(const int=0,const int=0);
 	Matrix(Matrix&);
 	~Matrix();
-	void Matrix(const int=0,const int=0);
-	Matrix& operator=(const Matrix&);
+//	void Matrix(const int=0,const int=0);
+	Matrix& operator=(Matrix&);
 	Matrix& operator+(Matrix&);
 	Matrix& operator-(Matrix&);
-	Matrix& operator* (Matrix& ob2);
+	Matrix& operator*(Matrix&);
 	void display();
 	friend bool addCheck(Matrix&,Matrix&);
 	friend bool subCheck(Matrix&,Matrix&);
@@ -18,9 +18,9 @@ class Matrix
 };
 Matrix :: Matrix(const int r,const int c)
 {
+	row =r;col =c;
 	if(row)
 	{
-		row = r; col =c;
 		ptr = new int*[row];
 		for(int i=0;i<row;i++)
 		{
@@ -29,10 +29,12 @@ Matrix :: Matrix(const int r,const int c)
 				ptr[i][j] = rand()%5;
 		}
 	}
-	row = col =0;
-	ptr =NULL;
+	else
+	{
+		row = col =0;
+		ptr =NULL;
+	}
 }
-
 Matrix :: ~Matrix()
 {
 	for(int i=0;i<row;i++)
@@ -43,9 +45,9 @@ Matrix :: ~Matrix()
 	delete []ptr;
 	ptr = NULL;
 }
-//copy constructor
 Matrix :: Matrix(Matrix& ob2)
 {
+	cout<<"Copy invoked\n";
 	row = ob2.row;
 	col = ob2.col;
 	ptr = new int*[row];
@@ -56,6 +58,7 @@ Matrix :: Matrix(Matrix& ob2)
 			ptr[i][j] = ob2.ptr[i][j];
 	}
 }
+/*
 void Matrix :: Matrix(const int r,const int c)
 {
 	row = r; col =c;
@@ -66,7 +69,7 @@ void Matrix :: Matrix(const int r,const int c)
 		for(int j=0;j<col;j++)
 			ptr[i][j] = rand()%5;
 	}
-}
+}*/
 void Matrix :: display()
 {
 	for(int i=0;i<row;i++)
@@ -79,9 +82,9 @@ void Matrix :: display()
 	}
 	cout<<endl;
 }
-Matrix& Matrix :: operator=(const Matrix &ob2)
-{	
-	if(row != ob2.row)
+Matrix& Matrix :: operator=(Matrix &ob2)
+{
+	if(row != ob2.col)
 	{
 		row = ob2.row;
 		col = ob2.col;
@@ -94,9 +97,12 @@ Matrix& Matrix :: operator=(const Matrix &ob2)
 		}
 
 	}
+	else
+	{
 	for(int i=0;i<row;i++)
 		for(int j=0;j<col;j++)
 			ptr[i][j] = ob2.ptr[i][j];	
+	}
 	return *this;
 }
 Matrix& Matrix :: operator+ (Matrix &ob2)
@@ -119,6 +125,7 @@ Matrix& Matrix :: operator- (Matrix &ob2)
 Matrix& Matrix :: operator* (Matrix& ob2)
 {
 	static Matrix temp(row,ob2.col);
+	temp.display();
 	for(int i=0;i<row;i++)
 	{
 		for(int j=0;j<row;j++)
@@ -130,9 +137,11 @@ Matrix& Matrix :: operator* (Matrix& ob2)
 			}
 		}
 	}
+	cout<<"temp * "<<endl;
+	temp.display();
+	cout<<endl;
 	return temp;
 }
-
 bool addCheck(Matrix &op1,Matrix &op2)
 {
 	if(op1.row == op2.row)
@@ -145,7 +154,7 @@ bool subCheck(Matrix &op1,Matrix &op2)
 		return true;
 	return false;	
 }
-bool mulCheck(Matrix&,Matrix&)
+bool mulCheck(Matrix &op1,Matrix &op2)
 {
 	if(op1.col == op2.row)
 		return true;

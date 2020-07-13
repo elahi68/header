@@ -74,9 +74,12 @@ Matrix& Matrix :: operator=(const Matrix &ob2)
 		}
 
 	}
-	for(int i=0;i<row;i++)
-		for(int j=0;j<col;j++)
-			ptr[i][j] = ob2.ptr[i][j];	
+	else
+	{
+		for(int i=0;i<row;i++)
+			for(int j=0;j<col;j++)
+				ptr[i][j] = ob2.ptr[i][j];	
+	}
 	return *this;
 }
 Matrix& Matrix :: operator+ (Matrix &ob2)
